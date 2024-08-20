@@ -1,0 +1,43 @@
+/* Container styling */
+.drag-drop-box {
+    border: 2px dashed #cccccc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    background-color: #f9f9f9;
+    cursor: pointer;
+  }
+  
+  /* Hover and active state */
+  .drag-drop-box:hover {
+    background-color: #e6f7ff;
+    border-color: #0099ff;
+  }
+  
+  .drag-drop-box:active {
+    background-color: #cceeff;
+    border-color: #007acc;
+  }
+  
+  /* Text styling */
+  .drag-drop-box p {
+    font-size: 16px;
+    color: #666666;
+    margin: 0;
+  }
+  
+  .drag-drop-box p strong {
+    color: #0099ff;
+  }
+  
+  /* Drag active state */
+  .drag-drop-box.drag-active {
+    background-color: #e6ffe6;
+    border-color: #33cc33;
+  }
+  
+  .drag-drop-box.drag-active p {
+    color: #33cc33;
+  }
+  
