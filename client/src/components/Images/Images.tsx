@@ -15,8 +15,10 @@ import { Navigate } from 'react-router-dom';
 
 
 type Info={
-  fileName : string,
-  id : string
+  //fileName
+  filename : string,
+  //id
+  _id : string
   title : string,
   description : string,
   userName : string
@@ -63,7 +65,7 @@ export default function Images() {
 
   const getImages = async ()=>{
     
-    const res = await  axios.get("http://localhost:3000/images")
+    const res = await  axios.get("http://localhost:3000/images-test")
     
     console.log(res.data.fileNames);
     setFilenames(res.data.fileNames)
@@ -91,16 +93,7 @@ export default function Images() {
   const handleDelete = async ()=>{
 
     const res = await axios.delete(`http://localhost:3000/images/${deleteValue}`)
-    if(res.status === 200 ){
-      
-      // alert('successfuly deleted .... ')
-     
-    }
-    else{
-
-      // alert('some error has occured...')
-        
-    }
+    
     setModal('none')
     window.location.reload();
 }
@@ -134,9 +127,9 @@ useEffect(()=>{
     return(
       <div className='specific-image'>
       
-      <img src={`http://localhost:53877/${item.fileName}`} onClick={()=>{
+      <img src={`http://localhost:53877/${item.filename}`} onClick={()=>{
         setModal('flex')
-        setDeleteValue(item.id)
+        setDeleteValue(item._id)
         }}/>
 
         <h1>{item.title}</h1>

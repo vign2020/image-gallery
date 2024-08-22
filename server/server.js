@@ -137,31 +137,44 @@ app.get("/images" , async (req , res) =>{
     res.status(201).json({fileNames : fileNames})
 })
 
-//can't figure out the f***in problem . 
+//can't figure out the problem . 
 app.get('/images-test', async (req, res) => {
-  try {
-    // Fetch all ImageData documents
-    const imageDataList = await ImageData.find({});
 
-    // Create an array of promises for fetching the related Image documents
-    const combinedData = await Promise.all(
-      imageDataList.map(async (item) => {
-        // Fetch the corresponding Image document
-        const imageinfo = await Image.findOne({ _id: item._id });
-
-        // Combine the ImageData and Image document fields
-        return {
-          ...item.toObject(),   // Convert Mongoose document to plain object
-          imageinfo: imageinfo ? imageinfo.toObject() : null  // Handle cases where no Image is found
-        };
-      })
-    );
-
-    // Send the combined data as the response
-    res.status(201).json({ Combined_data: combinedData });
+  try{
+  const combinedData = await Image.aggregate([
+    {
+      $lookup: {
+        from: 'imagedatas',  // Collection name in the database
+        localField: 'imageInfo',
+        foreignField: '_id',
+        as: 'imageDetails'
+      }
+    },
+    {
+      $unwind: {
+        path: '$imageDetails',
+        preserveNullAndEmptyArrays: true // If you want to keep images records without a match in imageData
+      }
+    },
+    {
+      $addFields: {
+        filename: { $ifNull: ['$imageDetails.filename', null] },
+        url: { $ifNull: ['$imageDetails.url', null] },
+        contentType: { $ifNull: ['$imageDetails.contentType', null] },
+        size: { $ifNull: ['$imageDetails.size', null] }
+        // Add other fields from imageDetails as needed
+      }
+    },
+    {
+      $project: {
+        imageDetails: 0 // Exclude imageDetails field if you don't want it in the final output
+      }
+    }
+  ]);
+    
+ res.status(201).json({fileNames : combinedData})
   } catch (err) {
-    console.error('Error:', err);
-    res.status(500).json({ message: 'An error occurred', error: err.message });
+    console.error('Error combining data:', err);
   }
 });
 
@@ -180,6 +193,7 @@ app.delete("/images/:id" , async (req , res) =>{
     console.log(id)
     // const Imagedelete = await Image.deleteOne({_id : id})
     const ImageDatadelete = await ImageData.deleteOne({_id : id})
+    const ImageDelete = await Image.deleteOne({_id : id})
 
     // console.log(result)
     res.sendStatus(200)
