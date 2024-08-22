@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import DragnDrop from '../DragnDrop/DragnDrop'
 
@@ -35,6 +35,8 @@ export default function Update() {
     formData.append('description' , desc);
     formData.append('userName' , 'Vignesh')
 
+    console.log('id is ' + id )
+
     try {
         const res = await axios.patch(`http://localhost:3000/images/${id}`, formData, {
             headers: {
@@ -42,12 +44,15 @@ export default function Update() {
             },
         });
         setStatus(res.status)
-        // console.log(res.data.fileNames);
-        // setFilenames([res.data.fileNames])
+
     } catch (e) {
         console.error(e);
     }
 };
+
+useEffect(()=>{
+    if(acceptedFiles) handleUpdate()
+},[acceptedFiles])
 
 
   return (

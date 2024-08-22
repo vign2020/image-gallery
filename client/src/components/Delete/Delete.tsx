@@ -8,10 +8,10 @@ export default function Delete() {
 
         const res = await axios.delete(`http://localhost:3000/images/${deleteValue}`)
         if(res.status === 200 ){
-            alert('success')
+            // alert('success')
         }
         else{
-            alert('failure')
+            // alert('failure')
         }
     }
   return (

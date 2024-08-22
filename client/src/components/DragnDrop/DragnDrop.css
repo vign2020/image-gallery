@@ -80,6 +80,8 @@
   
   .show-message h1.success {
     color: black;
+    position: relative;
+    left : -2%;
   }
   
   .show-message h1.error {

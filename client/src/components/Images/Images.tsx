@@ -93,12 +93,12 @@ export default function Images() {
     const res = await axios.delete(`http://localhost:3000/images/${deleteValue}`)
     if(res.status === 200 ){
       
-      alert('successfuly deleted .... ')
+      // alert('successfuly deleted .... ')
      
     }
     else{
 
-      alert('some error has occured...')
+      // alert('some error has occured...')
         
     }
     setModal('none')
@@ -134,7 +134,7 @@ useEffect(()=>{
     return(
       <div className='specific-image'>
       
-      <img src={`http://localhost:51519/${item.fileName}`} onClick={()=>{
+      <img src={`http://localhost:53877/${item.fileName}`} onClick={()=>{
         setModal('flex')
         setDeleteValue(item.id)
         }}/>
