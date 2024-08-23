@@ -127,7 +127,7 @@ useEffect(()=>{
     return(
       <div className='specific-image'>
       
-      <img src={`http://localhost:53877/${item.filename}`} onClick={()=>{
+      <img src={`http://localhost:50905/${item.filename}`} onClick={()=>{
         setModal('flex')
         setDeleteValue(item._id)
         }}/>
@@ -160,11 +160,10 @@ useEffect(()=>{
                 </div>
              </div>
           </div>
-
+{/* 
           <div id="modal" className="modal" style={{display : updateModal}} >
-          {/* <DragnDrop status={status} setAcceptedFiles={setAcceptedFiles} setUpdateFiles={setUpdateFiles} update={true} /> */}
 
-          </div>
+          </div> */}
 
         
       </div>

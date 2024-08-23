@@ -207,46 +207,55 @@ app.delete("/images/:id" , async (req , res) =>{
 })
 
 
-app.patch("/images/:id" , (req, res)=>{
-      const id = req.params.id
-      console.log(id)
+app.patch("/images/:id", async (req, res) => {
+  const imageId = req.params.id;
 
-      console.log('updating image ....')
+  console.log('Updating image...');
 
-      upload(req, res, async (err) => {
-        if (err) {
-          return res.status(400).json({ message: err.message });
-        }
-    
-        const filePath = req.file ? req.file.path : req.body.acceptedFiles[0].path; // Ensure this path exists
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ message: err.message });
+    }
 
-        if (req.file || filePath) {
-          try {
-            // Create and save ImageData
+    const filePath = req.file ? req.file.path : req.body.acceptedFiles[0].path;
 
-            await ImageData.findByIdAndUpdate(id , {    
-              filename: req.file ? req.file.filename : path.basename(filePath),
-              url: req.file ? `/uploads/${req.file.filename}` : `/uploads/${path.basename(filePath)}`,
-              contentType: req.file ? req.file.mimetype : 'none',
-              size: req.file ? req.file.size : 'none'
-            }, { new: true })
+    try {
+      // First, find the `Image` document and retrieve the `imageInfo` reference
+      const image = await Image.findById(imageId);
 
-    
-            res.status(201).json({
-              message: "Image and metadata saved successfully"
-            });
-          } catch (e) {
-            res.status(500).json({
-              message: 'Could not insert data',
-              error: e.message,
-            });
-          }
-        } else {
-          res.status(400).json({ message: 'No file uploaded' });
-        }
+      if (!image) {
+        return res.status(404).json({ message: 'Image not found' });
+      }
+
+      const imageDataId = image.imageInfo;  // This is the reference to the `ImageData` document
+
+      // Update `ImageData` using the retrieved `imageDataId`
+      await ImageData.findByIdAndUpdate(imageDataId, {
+        filename: req.file ? req.file.filename : path.basename(filePath),
+        url: req.file ? `/uploads/${req.file.filename}` : `/uploads/${path.basename(filePath)}`,
+        contentType: req.file ? req.file.mimetype : 'none',
+        size: req.file ? req.file.size : 'none'
+      }, { new: true });
+
+      // Update `Image` using the `imageId`
+      await Image.findByIdAndUpdate(imageId, {
+        title: req.body.title,
+        userName: req.body.userName,
+        description: req.body.description
+      }, { new: true });
+
+      res.status(201).json({
+        message: "Image and metadata updated successfully"
       });
+    } catch (e) {
+      res.status(500).json({
+        message: 'Could not update data',
+        error: e.message,
+      });
+    }
+  });
+});
 
-})
 
 app.post("/test-upload" , (req , res) =>{
   //insert into the uploads folder 
