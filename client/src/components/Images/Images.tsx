@@ -1,113 +1,27 @@
-import React, { DetailedHTMLProps, ImgHTMLAttributes, useEffect, useState } from 'react'
-import imageone from './assets/imageone.jpeg'
-import axios from 'axios'
+import  { useState } from 'react'
 import './image.css'
-import { Link, redirect, useNavigate } from 'react-router-dom';
-import DragnDrop from '../DragnDrop/DragnDrop';
+import {  useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar';
-
-
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import useHandleGet from '../../hooks/useHandleget';
+import useHandleUpdate from '../../hooks/useHandleUpdate';
+import useHandleDelete from '../../hooks/useHandleDelete'
 
-import { Navigate } from 'react-router-dom';
-
-
-type Info={
-  //fileName
-  filename : string,
-  //id
-  _id : string
-  title : string,
-  description : string,
-  userName : string
-}
 export default function Images() {
 
   const navigate = useNavigate();
-
-  const [image , setImage] = useState<string | undefined | unknown>(undefined);
-  const [filename , setFilenames] = useState<Info[]>([])
-
   const [modal , setModal] = useState<string>('none')  
-  const [updateModal , setUpdateModal] = useState('none')
   const [deleteValue , setDeleteValue] = useState<string | undefined>()
-  const [acceptedFiles , setAcceptedFiles] = useState()
-  const [status , setStatus] = useState<number | undefined>()
-
-  const [updateFiles , setUpdateFiles] = useState()
- 
-  
-  // const [updateValue , setUpdateValue] = useState<string | undefined>() 
-
-  const length = 15; // Length of the array
-  // const zeroArray = new Array(length).fill(0);
-
-  // const fetch_dummy_image = ()=>{
-  //   return new Promise((resolve ,reject) =>{
-  //     setTimeout(() => {
-
-  //       resolve(imageone)
-  //     }, 1000);
-      
-  //   })
-  // }
-  // const get_images = async ()=>{
-  //   const fetchImagesData = await fetch_dummy_image()
-    
-  //   setImage(fetchImagesData)
-  // }
-
-  // useEffect(()=>{
-  //   get_images()
-  // },[])
-
-  const getImages = async ()=>{
-    
-    const res = await  axios.get("http://localhost:3000/images-test")
-    
-    console.log(res.data.fileNames);
-    setFilenames(res.data.fileNames)
-    
-  
-  }
-
-  const handleUpdate = async ()=>{
-    const formData = new FormData();
-    acceptedFiles ? formData.append('file', acceptedFiles[0]) : ' '; // assuming acceptedFiles is an array
-    console.log('delete values ' + deleteValue )
-    try {
-        const res = await axios.patch(`http://localhost:3000/images/${deleteValue}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-        setStatus(res.status)
- 
-
-    } catch (e) {
-        console.error(e);
-    }
-  }
-  const handleDelete = async ()=>{
-
-    const res = await axios.delete(`http://localhost:3000/images/${deleteValue}`)
-    
-    setModal('none')
-    window.location.reload();
-}
-
-useEffect(()=>{
-  if(acceptedFiles) handleUpdate()
-},[updateFiles])
+  const [update , setUpdate] = useState<boolean | undefined>(); 
+  const [del , setDelete] = useState<boolean | undefined>(); 
 
 
+  //custom hooks 
+    const  filename =useHandleGet();
+                    useHandleUpdate(deleteValue , update);
+                    useHandleDelete(deleteValue , del , modal , setModal)
 
-  useEffect(()=>{
-    getImages()
-  },[])
-  
   return (
     <div>
         
@@ -123,11 +37,13 @@ useEffect(()=>{
           
              {
     filename?
-  filename.map((item, idx)=>{
+  filename.map((item)=>{
     return(
       <div className='specific-image'>
+
+        
       
-      <img src={`http://localhost:50905/${item.filename}`} onClick={()=>{
+      <img src={`http://localhost:52011/${item.filename}`} onClick={()=>{ 
         setModal('flex')
         setDeleteValue(item._id)
         }}/>
@@ -152,18 +68,16 @@ useEffect(()=>{
                 <div className="modal-buttons">
                   <button className="btn-update" onClick={()=>{
                     setModal('none')
-                    setUpdateModal('flex')
+                    // setUpdateModal('flex')
+                    setUpdate(true);
                     navigate(`/update/${deleteValue}`)
                   
                     }}>Update</button>
-                  <button className="btn-delete" onClick={()=>{handleDelete()}}>Delete</button>
+                  <button className="btn-delete" onClick={()=>{setDelete(true)}}>Delete</button>
                 </div>
              </div>
           </div>
-{/* 
-          <div id="modal" className="modal" style={{display : updateModal}} >
 
-          </div> */}
 
         
       </div>

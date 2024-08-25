@@ -6,33 +6,13 @@
   
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
-    /* min-height: 100vh; */
+
     background-color: #f4f4f4;
   }
   
-  .container {
-    width: 90%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    
-    display: flex;
-    flex-direction:column ;
-    border : 1px solid grey;
-    border-radius: 40px;
-
-    position: relative;
-    top : 50px;
-  
-  }
   
   .button-click-all{
-    position : relative;
-    /* left : 29%; */
-    bottom : -10px;
+
   
     background-color: black;
     color: white;
@@ -44,7 +24,20 @@
     transition: background-color 0.3s ease;
     border-radius: 40px;
     height: 40px;
+
+    width: 50%; 
+     position: relative;
+    left : 25%;
   
+  }
+
+  .container{
+    /* border : 2px solid blue; */
+    display: flex;
+    flex-direction: column;
+    width: 60vw;
+    justify-content:center ;
+    /* align-items: center; */
   }
 
   .container input{
@@ -58,6 +51,7 @@
     text-align: center;
     background-color: white;
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    /* border: 2px solid red; */
   }
   
   .drag-drop-box p {

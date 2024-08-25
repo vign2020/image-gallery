@@ -62,7 +62,7 @@ useEffect(()=>{
   return (
     
 
-  <div>
+  <div className='upload-wrapper'>
  
   <Navbar/>
   <div className='container-wrapper'>

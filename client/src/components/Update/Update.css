@@ -1,5 +1,19 @@
-.update-container h1{
+/* .update-container h1{
    position: relative;
    left : 23%;
  
-}
+} */
+ .update-container{
+   display: flex;
+   flex-direction: column;
+   justify-content: space-around;
+   align-items:  center;
+   border : 2px solid grey;
+   height: 70vh;
+   width: 90vw;
+
+   position: absolute;
+   top: 50%;
+   transform: translate(5% ,  -50%);
+
+ }

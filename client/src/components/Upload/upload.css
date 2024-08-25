@@ -1,0 +1,9 @@
+
+.container-wrapper{
+ 
+    position: relative;
+    top : 50%;
+    left : 20%;
+    /* top: 50%;
+    transform: translate(30% ,  -50%); */
+}
