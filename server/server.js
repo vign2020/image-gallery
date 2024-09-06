@@ -7,12 +7,14 @@ const multer = require('multer');
 const path = require('path');
 const cors = require("cors")
 
-
+var bodyParser = require('body-parser')
 const app = express()
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); 
+ app.use(express.urlencoded({ extended: false })); 
+
+
 
 
 
@@ -49,8 +51,9 @@ app.post('/images', (req, res) => {
       return res.status(400).json({ message: err.message });
     }
 
-    const filePath = req.file ? req.file.path : req.body.acceptedFiles[0].path; // Ensure this path exists
-
+      const filePath = req.file ? req.file.path : req.body.acceptedFiles[0].path; 
+  
+    
     if (req.file || filePath) {
       try {
         // Create and save ImageData
@@ -81,7 +84,9 @@ app.post('/images', (req, res) => {
           error: e.message,
         });
       }
-    } else {
+    } 
+
+    else {
       res.status(400).json({ message: 'No file uploaded' });
     }
   });
@@ -264,4 +269,30 @@ app.post("/test-upload" , (req , res) =>{
   console.log(acceptedFiles[0].path)
 })
 
+
+app.post('/endpoint-mutate', (req, res) => {
+  const { title, description, userName } = req.body;
+
+  // Validate that the required fields are present
+  // console.log(title , description, username)
+  if (!title || !description || !userName) {
+      return res.status(400).json({ message: 'All fields are required.' });
+  }
+
+  // Handle the data (e.g., save to database, process it, etc.)
+  // For now, we'll just send a success response with the received data
+  res.status(200).json({
+      message: 'Data received successfully.',
+      data: {
+          title,
+          description,
+          userName
+      }
+  });
+});
+
+
 app.listen(3000 , ()=>{ console.log('listening ... ')})
+
+
+'some change'
